@@ -1,0 +1,10 @@
+.idea/
+
+*.dll
+*.exe
+*.pdb
+*.runtimeconfig.json
+*.deps.json
+*.csproj
+*.cs
+obj/
