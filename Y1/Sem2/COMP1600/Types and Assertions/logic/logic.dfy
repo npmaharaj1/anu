@@ -23,6 +23,7 @@ function makeItSmaller(i:int) : int
     }
     
 function makeItSmallerNat(i:nat) : nat
+    requires i > 1
     ensures makeItSmallerNat(i) > 0 && makeItSmallerNat(i) < i {
         i - 1
     }
