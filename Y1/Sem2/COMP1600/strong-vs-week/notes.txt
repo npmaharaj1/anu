@@ -1,0 +1,6 @@
+Strong requirement takes more work to compute than week arguments
+
+eg. && is stronger than || as && is harder to prove
+eg. > is weaker than == as it is easier to prove
+
+"false" is the strongest argument as it is so hard that it's impossible to prove true
