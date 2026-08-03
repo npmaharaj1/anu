@@ -64,9 +64,18 @@ predicate perpendicular(u : (int,int), v : (int,int)) {
 //   - m and n are both 0, OR
 //   - m is not 0 and n leaves remainder 0 when divided by m.
 // Use  %  (modulus),  &&  (and),  ||  (or).
-function divides(m : nat, n : nat) : bool
-  // TODO: give a body
-  // try making this a predicate
+
+// function divides(m : nat, n : nat) : bool {
+//     if (m == 0 && n == 0) then
+//         true
+//     else if ((m != 0) && (n % m == 0)) then
+//         true
+//     else false
+// }
+
+predicate divides(m : nat, n : nat) {
+    (m == 0 && n == 0) || ((m != 0) && (n % m == 0))
+}
 
 
 // Exercise 4.
@@ -74,17 +83,35 @@ function divides(m : nat, n : nat) : bool
 // inclusive. Dafny lets you write a CHAINED comparison
 //   lo <= x <= hi
 // which means  lo <= x && x <= hi .
-predicate inRange(lo : int, x : int, hi : int)
-// TODO: give a body (use a chained comparison)
-
+predicate inRange(lo : int, x : int, hi : int) {
+    lo <= x && x <= hi
+}
 
 // Exercise 5.
 // A "let"-style local binding uses  var name := expr;  before the
 // result expression (like Haskell's let/where). withTax adds 10%
 // tax: bind  tax  to  cents / 10  and then return cents + tax.
-function withTax(cents : int) : int
-  requires cents >= 0
-// TODO: give a body using  var tax := ... ;
+function withTax(cents : int) : int 
+    requires cents >= 0 {
+        var tax := cents / 10;
+        cents + tax
+}
+
+lemma testDistSquared()
+  ensures distSquared((3,4)) == 25 {}
+lemma testDotProduct()
+  ensures dotProduct((4,5), (8,9)) == 77 {}
+lemma testPerpendicular()
+  ensures perpendicular((4,5), (8,9)) == false
+  ensures perpendicular((2,4), (8, -4)) == true {}
+lemma testDivides()
+  ensures divides(4,12) == true
+  ensures divides(13,4) == false {}
+lemma testInRange()
+  ensures inRange(0, 4, 10) == true
+  ensures inRange(0, 0, 10) == true
+  ensures inRange(0, -1, 10) == false {}
+
 
 /* ------------------------------------------------------------
    PART B -- Datatypes and pattern-matching   (Lecture 3)
@@ -97,9 +124,12 @@ datatype light = Red | Orange | Green
 // Complete  next , the light that follows the given one in the usual
 // cycle  Red -> Green -> Orange -> Red . Use a  match  with one case
 // per constructor.
-function next(l : light) : light
-// TODO: give a body:  match l case Red => ...  etc.
-
+function next(l : light) : light {
+  match l
+    case Red => Green
+    case Green => Orange
+    case Orange => Red
+}
 
 // Exercise 7.
 // A shape carries some data with each constructor.
@@ -110,8 +140,12 @@ datatype shape =
 
 // area returns:  Rectangle -> height*width ,  Square -> side*side ,
 // Triangle -> base*height/2 . Pattern-match and use the fields.
-function area(s : shape) : nat
-// TODO: give a body
+function area(s : shape) : nat {
+  match s
+    case Rectangle(height, width) => height*width
+    case Square(side) => side * side
+    case Triangle(base, height) => (base * height) / 2
+}
 
 
 // Exercise 8.
@@ -124,9 +158,12 @@ datatype month =
 // Complete monthLen. You can group cases that share a result:
 //   case Jan | Mar | May | ... => 31
 // and you will need an  if  for February.
-function monthLen(m : month, isLeap : bool) : nat
-// TODO: give a body
-
+function monthLen(m : month, isLeap : bool) : nat {
+  match m
+    case Sep | Apr | Jun | Nov => 30
+    case Jan | Mar | May | Jul | Aug | Oct | Dec => 31
+    case Feb => if isLeap then 29 else 28
+}
 
 // And now calculate when a year is a leap year:
 //   - write a function with appropriate type
@@ -134,12 +171,40 @@ function monthLen(m : month, isLeap : bool) : nat
 //   - but if it's a century year, it's not a leap year
 //   - UNLESS, if it's divisible by 400, then it is a leap year after all
 // IOW, 2024 was a leap year, 1900 wasn't, 2000 was.
-predicate isLeapYear /* write stuff here! */
+predicate isLeapYear(year : nat) {
+  if (year % 4 == 0) then
+    if (year % 100 == 0) then
+      if (year % 400 == 0) then
+        true
+      else
+        false
+    else
+      true
+  else
+    false
+}
 
 // write testing lemmas for the test cases in the comment above
-lemma isLY2024()
-lemma isLY1900()
-lemma isLY2000()
+lemma testNext()
+  ensures next(Red) == Green
+  ensures next(Green) == Orange
+  ensures next(Orange) == Red {}
+  
+lemma testArea()
+  ensures area(Rectangle(3, 2)) == 6
+  ensures area(Square(4)) == 16
+  ensures area(Triangle(5, 8)) == 20 {}
+  
+lemma testMonthLen()
+  ensures monthLen(Apr, true) == 30
+  ensures monthLen(Feb, true) == 29
+  ensures monthLen(Feb, false) == 28 {}
+
+lemma testisLeapYear()
+  ensures isLeapYear(2024) == true
+  ensures isLeapYear(1900) == false
+  ensures isLeapYear(2000) == true {}
+
 
 /* ------------------------------------------------------------
    PART C -- Recursion, and simple specifications
@@ -150,8 +215,12 @@ lemma isLY2000()
 // Recursion over the natural numbers. exp(m,p) computes m to the
 // power p, remembering  m^0 = 1  and  m^(p+1) = m * m^p .
 // Recurse on p.
-function exp(m : nat, p : nat) : nat
-// TODO: give a body
+function exp(m : nat, p : nat) : nat {
+  if (p == 0) then
+    1
+  else
+    m * exp(m, (p-1))
+}
 
 
 // Exercise 10.
@@ -161,7 +230,7 @@ function exp(m : nat, p : nat) : nat
 // line (a PRECONDITION) that rules out the bad case, so the squiggle
 // on the division disappears.
 function gradient(p1 : (int,int), p2 : (int,int)) : int
-  // TODO: add a  requires  clause here
+  requires (p2.0 - p1.0) != 0
 {
   (p2.1 - p1.1) / (p2.0 - p1.0)
 }
@@ -171,9 +240,9 @@ function gradient(p1 : (int,int), p2 : (int,int)) : int
 // makeItBigger must return something strictly larger than its input.
 // Give a body that satisfies it. (Many answers work.)
 function makeItBigger(i : int) : int
-  ensures makeItBigger(i) > i
-// TODO: give a body
-
+  ensures makeItBigger(i) > i {
+    i + 1
+}
 
 // Exercise 12.
 // factorial is given. A "testing lemma" states a fact about a
@@ -186,14 +255,25 @@ function fact(n : nat) : nat
   if n < 2 then 1 else n * fact(n - 1)
 }
 
+lemma testExp()
+  ensures exp(2,7) == 128
+  ensures exp(5,4) == 625 {}
+
+lemma testGradient()
+  ensures gradient((0, 0), (4,4)) == 1 {}
+
+lemma testMakeItBigger()
+  ensures makeItBigger(5) > 5
+  ensures makeItBigger(8) > 8 {}
+
 // Claim: fact(4) equals 24.
 lemma factTest1()
-  // TODO: write the ensures for "fact(4)"
+  ensures fact(4) == 24
 {}
 
 // Claim: fact(6) is greater than 100.
 lemma factTest2()
-  // TODO: write the ensures that claims that 6! is strictly larger than 100
+  ensures fact(6) > 100
 {}
 
 
@@ -225,7 +305,11 @@ function length<T>(l : list<T>) : nat
 // puts l1 in front of l2:
 //   - if l1 is Nil, the answer is just l2;
 //   - if l1 is Cons(x, xs), the answer is Cons(x, <append of xs, l2>).
-function append<T>(l1 : list<T>, l2 : list<T>) : list<T>
+function append<T>(l1 : list<T>, l2 : list<T>) : list<T> {
+  match l1
+    case Nil => l2
+    case Cons(x, xs) => Cons(x, append(xs, l2))
+}
 // TODO: give a body, following the pattern of length above
 
 
@@ -233,8 +317,11 @@ function append<T>(l1 : list<T>, l2 : list<T>) : list<T>
 // member(x, A) is true when x appears somewhere in the list A:
 //   - Nil contains nothing;
 //   - Cons(y, ys) contains x when  x == y , or when x is somewhere in ys.
-function member(x : int, A : list<int>) : bool
-// TODO: give a body
+function member(x : int, A : list<int>) : bool {
+  match A
+    case Nil => false
+    case Cons(y, ys) => x == y || member(x, ys)
+}
 
 
 // Exercise 15.  (*) stretch -- only if you have time.
@@ -244,8 +331,11 @@ datatype tree<V> = Lf | Node(key : string, val : V, left : tree<V>, right : tree
 
 // size counts the internal (Node) nodes. A Lf has size 0; a Node has
 // size 1 plus the sizes of its two subtrees. Recurse, like length.
-function size<V>(t : tree<V>) : nat
-// TODO: give a body
+function size<V>(t : tree<V>) : nat {
+  match t
+    case Lf => 0
+    case Node(_, _, left, right) => 1 + size(left) + size(right)
+}
 
 // ============================================================
 // End of Lab 1. If everything is green, well done!
