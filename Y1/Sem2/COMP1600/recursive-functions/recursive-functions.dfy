@@ -50,4 +50,3 @@ function size<T>(t:tree<T>) : nat
     case Lf => 0
     case Node(_, _, lt, rt) => 1 + size(lt) + size(rt)
 }
-
