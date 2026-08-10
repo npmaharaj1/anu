@@ -57,8 +57,14 @@ function min(a : nat, b : nat) : nat
 //   - taking 0 elements gives Nil;
 //   - taking from Nil gives Nil;
 //   - taking n from Cons(x, xs) keeps x, then takes n-1 from xs.
+
 function take<T>(n : nat, l : list<T>) : list<T>
-// TODO: give a body
+{
+  match (n, l)
+    case (_, Nil) => Nil
+    case (0, _) => Nil
+    case (n, Cons(hd, tl)) => Cons(hd, take(n-1, tl))
+}
 
 
 // Exercise 2.
@@ -66,21 +72,40 @@ function take<T>(n : nat, l : list<T>) : list<T>
 //   - dropping 0 elements leaves l unchanged;
 //   - dropping from Nil gives Nil;
 //   - dropping n from Cons(x, xs) drops x, then drops n-1 from xs.
-function drop<T>(n : nat, l : list<T>) : list<T>
-// TODO: give a body
 
+function drop<T>(n : nat, l : list<T>) : list<T>
+{
+  match (n, l)
+    case (_, Nil) => Nil
+    case (0, l) => l
+    case (n, Cons(hd, tl)) => drop(n-1, tl)
+}
 
 // Exercise 3.
 // reverse(l) reverses a list. The tidy recursive definition puts the
 // head on the END of the reversed tail:
 //   reverse(Cons(x, xs)) == append(reverse(xs), Cons(x, Nil))
+
 function reverse<T>(l : list<T>) : list<T>
-// TODO: give a body
+{
+  match (l)
+    case Nil => Nil
+    case Cons(hd, tl) => append(reverse(tl), Cons(hd, Nil))
+}
+
+lemma testTake()
+  ensures take(3, Cons(1, Cons(2, Cons(3, Cons(4, Cons(5, Nil)))))) == Cons(1, Cons(2, Cons(3, Nil))) {}
+
+lemma testDrop()
+  ensures drop(3, Cons(1, Cons(2, Cons(3, Cons(4, Cons(5, Nil)))))) == Cons(4, Cons(5, Nil)) {}
+
+lemma testReverse()
+  ensures reverse(Cons(1, Cons(2, Cons(3, Nil)))) == Cons(3, Cons(2, Cons(1, Nil))) {}
 
 
-/* ------------------------------------------------------------
-   PART B -- zip and unzip   (Lecture 4)
-   ------------------------------------------------------------ */
+// ------------------------------------------------------------
+//   PART B -- zip and unzip   (Lecture 4)
+//   ------------------------------------------------------------
 
 // Exercise 4.
 // zip pairs up two lists element by element, stopping when either
@@ -89,9 +114,14 @@ function reverse<T>(l : list<T>) : list<T>
 //   and Nil whenever either list is Nil.
 // Hint: you can match on the pair  (l1, l2)  and use a wildcard  _
 // for the "either is Nil" cases:
-function zip<A, B>(l1 : list<A>, l2 : list<B>) : list<(A, B)>
-// TODO: give a body
 
+function zip<A, B>(l1 : list<A>, l2 : list<B>) : list<(A, B)>
+{
+  match (l1, l2)
+    case (Cons(hd1, tl1), Cons(hd2, tl2)) => Cons((hd1, hd2), zip(tl1, tl2))
+    case (Nil, _) => Nil
+    case (_, Nil) => Nil
+}
 
 // Exercise 5.
 // unzip is the reverse operation: it splits a list of pairs back into
@@ -100,8 +130,11 @@ function zip<A, B>(l1 : list<A>, l2 : list<B>) : list<(A, B)>
 //   unzip(Cons((x, y), rest)) == ??
 // Hint: you can destructure with  var (xs, ys) := unzip(rest);
 function unzip<A, B>(l : list<(A, B)>) : (list<A>, list<B>)
-// TODO: give a body
-
+{
+  match (l)
+    case Cons((a, b), tl) => (Cons(a, unzip(tl).0), Cons(b, unzip(tl).1))
+    case Nil => (Nil, Nil)
+}
 
 // Exercise 6.
 // Our zip above quietly throws elements away when the two lists differ
@@ -117,13 +150,26 @@ function unzip<A, B>(l : list<(A, B)>) : (list<A>, list<B>)
 // so the selector might be invalid. Add a  requires  clause that rules
 // this out. Think about what has to be true of the two lengths.
 function zipPartial<A, B>(l1 : list<A>, l2 : list<B>) : list<(A, B)>
+  requires l2 > l1 && l2 != Nil
 {
+  if l1.Nil?
+    then Nil
+  else Cons((l1.hd, l2.hd), zipPartial(l1.tl, l2.tl))
 }
 
+lemma testZip() 
+  ensures zip(Cons(1, Cons(2, Cons(3, Nil))), Cons(5, Cons(6, Nil))) == Cons((1, 5), Cons((2, 6), Nil)) {}
 
-/* ------------------------------------------------------------
-   PART C -- Lemmas: let Dafny do the induction   (Lecture 5)
-   ------------------------------------------------------------ */
+lemma testUnzip()
+  ensures unzip(Cons((0, 1), Cons((2, 3), Nil))) == (Cons(0, Cons(2, Nil)), Cons(1, Cons(3, Nil))) {}
+
+method Main() {
+  print zipPartial(Cons(0, Cons(1, Cons(2, Nil))), Cons(5, Cons(6, Nil)));
+}
+
+// ------------------------------------------------------------
+//   PART C -- Lemmas: let Dafny do the induction   (Lecture 5)
+//   ------------------------------------------------------------
 
 // Exercise 7.  (induction over the numbers)
 // sumUpTo(n) adds up  0 + 1 + 2 + ... + n . Its well-known closed form
@@ -140,12 +186,12 @@ function sumUpTo(n : nat) : nat
 }
 
 lemma triangle(n : nat)
-  // TODO: write the ensures
-{}
+  ensures 2 * sumUpTo(n) == n * (n + 1) {}
 
 // WORKED EXAMPLE -- read this, nothing to do.
 // The length of an append is the sum of the lengths. Again the empty
 // body: Dafny finds the induction (this time over a list) by itself.
+
 lemma lengthAppend<T>(l1 : list<T>, l2 : list<T>)
   ensures length(append(l1, l2)) == length(l1) + length(l2)
 {}
@@ -176,6 +222,7 @@ lemma takeDropAppend<T>(n : nat, l : list<T>)
 // the original. The result of unzip is a pair, so refer to its parts
 // as  unzip(l).0  and  unzip(l).1, or pattern match with
 // ensures var(l1,l2) := unzip(l); ...
+
 lemma unzipLength<A, B>(l : list<(A, B)>)
   // TODO: write the ensures (two of them)
 {}
@@ -190,10 +237,11 @@ lemma zipPartialLength<A, B>(l1 : list<A>, l2 : list<B>)
   // TODO: add the same requires as zipPartial, then write the ensures
 {}
 
+/*
 
-/* ------------------------------------------------------------
+//  ------------------------------------------------------------
    PART D -- Recursion over trees   (Lectures 4 & 5)
-   ------------------------------------------------------------ */
+   ------------------------------------------------------------
 
 // A binary tree with a value of type T at every internal node.
 datatype tree<T> = Leaf | Node(left : tree<T>, val : T, right : tree<T>)
@@ -215,6 +263,7 @@ function mirror<T>(t : tree<T>) : tree<T>
 // Exercise 15.
 // Mirroring does not change the number of nodes. Write the ensures for
 //     treeSize(mirror(t)) == ??
+
 lemma mirrorSize<T>(t : tree<T>)
   // TODO: write the ensures
 {}
@@ -231,6 +280,7 @@ lemma mirrorMirror<T>(t : tree<T>)
 // leaf: a Leaf has depth 0; a Node is 1 plus the LARGER of its two
 // subtree depths. You will need a  max  function on ints first -- you
 // have seen how to write one in lectures; add it above this exercise.
+
 function maxDepth<T>(t : tree<T>) : nat
 // TODO: define max (above), then give maxDepth a body
 
@@ -244,6 +294,7 @@ function maxDepth<T>(t : tree<T>) : nat
 // maxDepth(t) and treeSize(t). Leave the body empty.
 // If Dafny rejects your claim, it is not true of every tree --
 // try a different relation until it holds.
+
 lemma depthAndSize<T>(t : tree<T>)
   // TODO: state a relation between maxDepth(t) and treeSize(t)
 {}
