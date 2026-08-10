@@ -163,10 +163,6 @@ lemma testZip()
 lemma testUnzip()
   ensures unzip(Cons((0, 1), Cons((2, 3), Nil))) == (Cons(0, Cons(2, Nil)), Cons(1, Cons(3, Nil))) {}
 
-method Main() {
-  print zipPartial(Cons(0, Cons(1, Cons(2, Nil))), Cons(5, Cons(6, Nil)));
-}
-
 // ------------------------------------------------------------
 //   PART C -- Lemmas: let Dafny do the induction   (Lecture 5)
 //   ------------------------------------------------------------
@@ -181,12 +177,13 @@ method Main() {
 // and leave the body empty: Dafny proves it by induction on n, exactly
 // like the example you saw in the lecture.
 function sumUpTo(n : nat) : nat
+  ensures 2 * sumUpTo(n) == n * (n+1)
 {
   if n == 0 then 0 else n + sumUpTo(n - 1)
 }
 
 lemma triangle(n : nat)
-  ensures 2 * sumUpTo(n) == n * (n + 1) {}
+  {}
 
 // WORKED EXAMPLE -- read this, nothing to do.
 // The length of an append is the sum of the lengths. Again the empty
@@ -200,22 +197,21 @@ lemma lengthAppend<T>(l1 : list<T>, l2 : list<T>)
 // State and prove: the length of  take(n, l)  is  min(n, length(l)) .
 // Write the ensures; leave the body empty and check Dafny is happy.
 lemma takeLength<T>(n : nat, l : list<T>)
-  // TODO: write the ensures
-{}
+  ensures length(take(3, Cons(0, Cons(1, Cons(2, Cons(3, Nil)))))) == min(3, length(Cons(0, Cons(1, Cons(2, Cons(3, Nil)))))) {}
 
 // Exercise 9.
 // State and prove: the length of  drop(n, l)  is ??
 //   (You may need to write your own helper function for this.)
 lemma dropLength<T>(n : nat, l : list<T>)
-  // TODO: write the ensures
-{}
+  ensures length(drop(3, Cons(0, Cons(1, Cons(2, Cons(3, Nil)))))) == length(Cons(0, Cons(1, Cons(2, Cons(3, Nil))))) - 3 {}
 
 // Exercise 10.
 // take and drop fit back together: appending  take(n, l)  and
 //  drop(n, l)  gives back  l .
 lemma takeDropAppend<T>(n : nat, l : list<T>)
-  // TODO: write the ensures
-{}
+  ensures append(take(n, l), drop(n, l)) == l
+{
+}
 
 // Exercise 11.  (unzip lengths)
 // Unzipping a list of pairs gives two lists, each the same length as
@@ -224,8 +220,8 @@ lemma takeDropAppend<T>(n : nat, l : list<T>)
 // ensures var(l1,l2) := unzip(l); ...
 
 lemma unzipLength<A, B>(l : list<(A, B)>)
-  // TODO: write the ensures (two of them)
-{}
+  ensures length(unzip(l).0) == length(unzip(l).1)
+{ }
 
 // Exercise 12.  (zipPartial length)
 // Because zipPartial pairs up ALL elements, its result has exactly the
@@ -234,14 +230,14 @@ lemma unzipLength<A, B>(l : list<(A, B)>)
 // Note: this lemma mentions zipPartial, so it must satisfy zipPartial's
 // precondition -- you will need the same  requires  clause here too.
 lemma zipPartialLength<A, B>(l1 : list<A>, l2 : list<B>)
-  // TODO: add the same requires as zipPartial, then write the ensures
+  requires length(l1) == length(l2)
+  ensures length(zipPartial(l1, l2)) == length(l1)
 {}
 
-/*
 
 //  ------------------------------------------------------------
-   PART D -- Recursion over trees   (Lectures 4 & 5)
-   ------------------------------------------------------------
+//   PART D -- Recursion over trees   (Lectures 4 & 5)
+//   ------------------------------------------------------------
 
 // A binary tree with a value of type T at every internal node.
 datatype tree<T> = Leaf | Node(left : tree<T>, val : T, right : tree<T>)
@@ -250,29 +246,35 @@ datatype tree<T> = Leaf | Node(left : tree<T>, val : T, right : tree<T>)
 // treeSize counts the internal (Node) nodes: a Leaf has size 0; a Node
 // has size 1 plus the sizes of its two subtrees.
 function treeSize<T>(t : tree<T>) : nat
-// TODO: give a body
-
+{
+  match t
+    case Leaf => 0
+    case Node(left, _, right) => 1 + treeSize(left) + treeSize(right)
+}
 
 // Exercise 14.
 // mirror reflects a tree left-to-right: at each Node, swap the two
 // subtrees (recursively) and keep the value.
 function mirror<T>(t : tree<T>) : tree<T>
-// TODO: give a body
-
+{
+  match t
+    case Leaf => Leaf
+    case Node(left, val, right) => Node(mirror(right), val, mirror(left))
+}
 
 // Exercise 15.
 // Mirroring does not change the number of nodes. Write the ensures for
 //     treeSize(mirror(t)) == ??
 
 lemma mirrorSize<T>(t : tree<T>)
-  // TODO: write the ensures
+  ensures treeSize(mirror(t)) == treeSize(t)
 {}
 
 // Exercise 16.
 // Mirroring twice gets you back where you started. Write the ensures
 // clause capturing this.
 lemma mirrorMirror<T>(t : tree<T>)
-  // TODO: write the ensures
+  ensures mirror(mirror(t)) == t
 {}
 
 // Exercise 17.
@@ -281,9 +283,17 @@ lemma mirrorMirror<T>(t : tree<T>)
 // subtree depths. You will need a  max  function on ints first -- you
 // have seen how to write one in lectures; add it above this exercise.
 
-function maxDepth<T>(t : tree<T>) : nat
-// TODO: define max (above), then give maxDepth a body
+function max(x: int, y: int) : int
+{
+  if x > y then x else y
+}
 
+function maxDepth<T>(t : tree<T>) : nat
+{
+  match t
+    case Leaf => 0
+    case Node(left, val, right) => 1 + max(maxDepth(left), maxDepth(right))
+}
 
 // Exercise 18.
 // maxDepth and treeSize are not independent: for EVERY tree, one of
@@ -296,7 +306,7 @@ function maxDepth<T>(t : tree<T>) : nat
 // try a different relation until it holds.
 
 lemma depthAndSize<T>(t : tree<T>)
-  // TODO: state a relation between maxDepth(t) and treeSize(t)
+  ensures maxDepth(t) <= treeSize(t)
 {}
 
 // ============================================================
