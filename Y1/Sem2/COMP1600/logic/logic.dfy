@@ -27,3 +27,32 @@ function makeItSmallerNat(i:nat) : nat
     ensures makeItSmallerNat(i) > 0 && makeItSmallerNat(i) < i {
         i - 1
     }
+
+// Logic further
+// Syntax is the structure of the language
+// Semantics is the meaning of the language conveyed
+// Terms are the things we are talking abou
+//  In dafny; terms can include variables and functions and expressions
+//  Formulas: claim or assertions about terms using predicates
+
+// Defining Predicates
+function equalMod(x:int, y:int, z:int) : bool
+  requires z != 0
+{
+  x % z == y % z
+}
+
+lemma equalMod_relfexive(x:int, z:int)
+  requires z != 0
+  ensures equalMod(x, x, z) {}
+
+lemma equalMod_symmetric(x:int, y:int, z:int) 
+  requires z!= 0
+  requires equalMod(x,y,z)
+  ensures equalMod(y,x,z) {}
+
+lemma equalMod_trans(w:int, x:int, y:int, z:int)
+  requires z != 0
+  requires equalMod(w,x,z)
+  requires equalMod(x,y,z)
+  ensures equalMod(x,y,z) {}
