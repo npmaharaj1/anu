@@ -150,7 +150,7 @@ function unzip<A, B>(l : list<(A, B)>) : (list<A>, list<B>)
 // so the selector might be invalid. Add a  requires  clause that rules
 // this out. Think about what has to be true of the two lengths.
 function zipPartial<A, B>(l1 : list<A>, l2 : list<B>) : list<(A, B)>
-  requires l2 > l1 && l2 != Nil
+  requires length(l1) == length(l2)
 {
   if l1.Nil?
     then Nil
