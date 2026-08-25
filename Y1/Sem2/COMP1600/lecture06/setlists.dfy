@@ -70,13 +70,10 @@ lemma member_subset(x:int, A:lset, B:lset)
 
 // feels like it should work
 lemma member_union(x : int, A : lset, B : lset)
-  ensures member(x, union(A,B)) <==> member(x, A) || member(x, B) {}
-
-lemma subset_union(A : lset, B : lset, C : lset) 
-
+//  ensures member(x, union(A,B)) <==> member(x, A) || member(x, B) {}
 
 lemma subset_refl(A : lset)
-
+  ensures subset(A,A) {}
 
 lemma subset_trans(A : lset, B : lset, C : lset)
 
