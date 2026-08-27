@@ -16,6 +16,7 @@ function drop<T>(n: nat, l:list<T>) : list<T>
 
 function chunks<T>(n: nat, l: list<T>) : list<list<T>>
   requires 0 < n
+  decreases length(l)
 {
   match l
     case Nil => Nil

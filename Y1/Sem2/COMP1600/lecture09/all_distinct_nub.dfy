@@ -1,4 +1,4 @@
-include "core-list.dfy"
+include "../core-list.dfy"
 
 
 
