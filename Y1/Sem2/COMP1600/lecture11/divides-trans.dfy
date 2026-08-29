@@ -13,10 +13,11 @@ lemma divides_transitive(m:nat, n:nat, p:nat) // m|n & n|p ==> m|p
   requires divides(n,p)
   ensures divides(m,p)
 {
-  var q1 :| q1*m == n; // Because divides(m,n)
-  var q2 :| q2*n == p;  // Because divides(n,p)
+  var q1 : nat :| q1 * m == n;
+  var q2 : nat :| q2 * n == p;
 
-  assert p == q2*n;
-  assert p == q2 * (q1*m);
+  assert p == q2 * n;
+  assert p == q2 * (q1 * m);
   assert p == (q2 * q1) * m;
+  assert exists Q : nat :: Q * m == p; // There exists a Q in which Q*m == p
 }

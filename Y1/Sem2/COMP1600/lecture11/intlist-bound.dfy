@@ -29,16 +29,36 @@ lemma maxList_exceeds(l: list<int>)
       assert exceeds(maxList(js) + 1, js);
       assert maxList(l) + 1 > j;
       assert exceeds(maxList(l) + 1, js);
+      assert maxList(l) + 1 > j;
+      /* maxList(js) + 1 >> js
+         maxList(l) == max(j, maxList(js))
+         maxList(l) + 1 > j && maxList(l) + 1 > maxList(js)
+      */
+      assert maxList(l) + 1 >= maxList(js) + 1;
+        // And also maxList(js) + 1 >> js
+      assert exceeds(maxList(l) + 1, js);
+        // maxList(l) + 1 >> js
     }
 }
+
+lemma exceeds_ge(i: int, j: int, l: list<int>)
+  requires i >= j
+  requires exceeds(j, l)
+  ensures exceeds(i, l)
 
 lemma boundExists(l : list<int>)
   ensures exists m :: exceeds(m,l)
 {
   match l
     case Nil => {assert exceeds(10, l);}
+    case Cons(j, Nil) => { assert exceeds(j + 1, l);}
     case Cons(j, js) => {
-      maxlist_exceeds(l);
+      boundExists(js);
+      var m0 :| exceeds(m0, js);
+      assert max(m0, j) + 1 > j;
+      assert max(m0, j) + 1 > m0;
+      exceeds_ge(max(m0, j) + 1, m0, js);
+      assert exceeds(max(m0, j) + 1, m0, js);
       assert exceeds(maxList(l) + 1, l);
     }
 

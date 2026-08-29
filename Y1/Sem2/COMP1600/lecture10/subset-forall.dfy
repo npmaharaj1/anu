@@ -10,6 +10,12 @@ predicate member(x:int, A:lset)
     case Cons(y,ys) => x == y || member(x,ys)
 }
 
+lemma subset_member(x: int, A: lset, B: lset)
+  requires member(x, A)
+  requires subset(A, B)
+  ensures member(x, B)
+{}
+
 predicate subset(A: lset, B : lset)
 {
     match A 
@@ -45,8 +51,7 @@ lemma subset_forall(A : lset, B : lset)
         assert !subset(xs,B);
         var x0 :| member(x0,xs) && !member(x0,B);
         assert exists x0 :: member(x0,A) && !member(x0,B);
-      }
-      else {
+      } else {
         assert member(x,A);
         assert !member(x,B);
       }
@@ -55,22 +60,33 @@ lemma subset_forall(A : lset, B : lset)
   // surprising which is the tricky direction 
 }
 
-// this should now be easier
-lemma subset_refl(A:lset) ensures subset(A,A) 
-{
-  subset_forall(A,A);
-}
-
 lemma mem_reverse(x:int, A:lset)
   ensures member(x, reverse(A)) <==> member(x,A) 
 {
   match A case Nil=> {}
-  case Cons(y,ys) => 
-  member_append(x,reverse(ys),Cons(y,Nil));
+  case Cons(y,ys) => member_append(x,reverse(ys),Cons(y,Nil));
 }
+
 
 lemma reverse_subset(A:lset)
   ensures subset(reverse(A), A) 
   ensures subset(A, reverse(A))
 {
+  assert subset(A, reverse(A)) by {
+    subset_forall(reverse(A), A);
+    // subset(reverse(A), A) <==> forall x :: member(x, reverse(A)) ==> member(x, A)
+    forall x | member(x, reverse(A)) ==> member(x, A) {
+      mem_reverse(x, A);
+    }
+  }
+
+  assert subset(reverse(A), A) by {
+    
+  }
+}
+
+// this should now be easier
+lemma subset_refl(A:lset) ensures subset(A,A) 
+{
+  subset_forall(A,A);
 }
