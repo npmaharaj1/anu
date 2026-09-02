@@ -53,11 +53,13 @@ lemma subset_append(A: lset, B: lset)
     case Cons(x, xs) => {
       assert member(x, append(B, A));
       // assert subset(xs, append(B, A));
-      assert subset(xs, append(B, Cons(x,xs))); // B ++ x:xs == (B ++ [x]) ++ xs
       assert subset(xs, append(append(B, Cons(x, Nil)), xs)); // xs <= (B ++ [x]) ++ xs
-      assert append(B, Cons(x, xs)) == append(append(B, Cons(x, Nil)), xs);
+      assert append(B, Cons(x, xs)) == append(append(B, Cons(x,Nil)), xs);
+      assert subset(xs, append(B, Cons(x,xs))); // B ++ x:xs == (B ++ [x]) ++ xs
     }
 }
+
+
 
 // lemma subset_bigger(x: int, xs: lset)
 //   ensures subset(xs, Cons(x, xs))

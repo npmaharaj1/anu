@@ -301,8 +301,12 @@ lemma subset_antisym(i : int, A : ilist, B : ilist)
   requires subset(B, A)
   ensures member(i, A) <==> member(i, B)
 {
-  if (member(i, A) && member(i, B)) {
-    assert true;
+  if (member(i, A)) {
+    subset_member(i, A, B);
+  }
+  if (member(i, B)) {
+    subset_member(i, B, A);
+  }
 }
 
 
@@ -317,6 +321,7 @@ lemma subset_antisym(i : int, A : ilist, B : ilist)
 function nth<T>(n : nat, l : list<T>) : T
   requires 0 <= n <= length(l)
   requires length(l) > 0
+  requires n-1 < 0
 {
     match l 
     case Cons(h,t) => if n==0 then h else nth(n-1,t)
@@ -328,7 +333,14 @@ function nth<T>(n : nat, l : list<T>) : T
 */
 lemma member_nth(i:int, l : list<int>)
   ensures member(i, l) <==> exists n : nat | n < length(l) :: nth(n,l) == i
-{}
+{
+  // Two cases: nth(n, l) == i ==> member(i, l)
+  //            nth(n, 1) != i ==> !member(i, l)
+  
+  exists n : nat | n < length(l) ensures nth(n, l) == i {
+
+  }
+}
 
 // ***** Feedback *****
 // Please rate the following course activities in terms of usefulness to you, 
