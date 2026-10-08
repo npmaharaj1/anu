@@ -339,7 +339,6 @@ lemma member_nth(i:int, l : list<int>)
             assert member(i, js); // Assert that i is somewhere lower in the list since it wasn't found yet and it is inside
             var n0:nat :| n0 < length(js) && nth(n0, js) == i; // create an index n0 such that it is contained in the list and that represents the index in the rest of the list that is i
             assert nth(n0 + 1, l) == i ; // assert that the index after this is equal to i
-            assert n0 < length(l); 
             assert exists n : nat | n < length(l) :: nth(n, l) == i; // Recursively continue
          }
       }

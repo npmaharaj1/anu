@@ -1,0 +1,25 @@
+/* Lecture 16: a *logical* accumulator.
+   Ported from COMP1600 2025, week10-code.dfy (method m). */
+
+function f(i: int) : int
+{
+  // 3x^2 + 5x -2
+  3 * (i*i) + 5*i - 2
+}
+
+method anyZeroBelow(n: nat) returns (found: bool)
+  ensures found <==> exists i :: 0 <= i < n && f(i) == 0
+{
+  var x: nat := 0;
+  found := false;
+  while (x < n)
+    invariant x <= n
+    invariant found <==> exists i :: 0 <= i < x && f(i) == 0 // Guard but for step case
+  {
+    if (f(x) == 0) { found := true; }
+    x := x + 1;
+  }
+
+  assert x == n;
+
+}
