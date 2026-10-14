@@ -130,6 +130,7 @@ method countdown_queue(q0:seq<nat>)
         var h := q[0];
         if h > 0 {
             q := q[1..] + [h - 1];
+            sum_append(q[1..], h-1);
         } else {
             q := q[1..];
         }
@@ -141,28 +142,10 @@ lemma sum_append(s:seq<nat>, x:nat)
 {
     // Hint: Dafny will need be told that two sequences are
     // equal; look at the way sum calls itself recursively
-    assert sum([x]) == x;
-    assert |s| >= 0;
-    if (|s| == 0) {
-        assert sum(s) + x == x;
-    } else if (|s| == 1) {
-        assert sum(s) + x == s[0] + x;
-    } else {
-        assert |s + [x]| == |s| + 1;
-        assert sum(s) == s[0] + sum(s[1..]);
-        assert sum(s) + x == s[0] + sum(s[1..]) + x;
-        assert sum(s) + sum([x]) == s[0] + sum(s[1..]) + x;
-        assert sum(s) + sum([x]) == sum(s) + x;
-        assert sum(s) + sum([x]) == sum(s) + sum([x]);
-        assert sum(s) + x == sum(s) + x;
-        assert sum(s) + x == sum(s) + sum([x]);
-        assert sum(s) + x == sum(s) + x;
-        assert x in (s + [x]);
-        assert x in (s + [x]) ==> sum(s + [x]) == sum(s) + x;
 
+    if (|s| == 0) {
+        assert s + [x] == [x];
+    } else {
+        assert (s + [x])[1..] == s[1..] + [x];
     }
 }
-
-
-
-
