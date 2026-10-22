@@ -15,10 +15,8 @@ method minMax(a : seq<int>) returns (mn:int, mx:int)
       invariant i <= |a|
       invariant mn in a
       invariant mx in a
-      invariant a[i-1] <= mx
-      invariant forall n :: n in a[..(i-1)] ==> n <= mx
-      invariant forall n :: n in a[..(i-1)] ==> n >= mn
-      invariant a[i-1] >= mn
+      invariant mn <= a[i-1] <= mx
+      invariant forall n :: n in a[..(i-1)] ==> mn <= n <= mx
     {
         if a[i] < mn { mn := a[i]; }
         if a[i] > mx { mx := a[i]; }
@@ -86,6 +84,7 @@ lemma reverse_append<T>(s1:seq<T>, s2:seq<T>)
 */
 lemma reverseIndices<T>(s:seq<T>)
   ensures forall n :: n in s ==> n in reverse(s)
+  ensures forall n :: n in reverse(s) ==> n in s
 { }
 
 
@@ -138,6 +137,8 @@ lemma sumReverse(s:seq<int>)
     assert s == [];
     assert reverse(s) == [];
   } else {
-    sumAppend(s, reverse(s));
+    assert reverse(s) == reverse(s[1..]) + [s[0]] ;
+    reverseIndices(s);
+    assert sum(s) - sum(reverse(s)) == 0;
   }
 }
