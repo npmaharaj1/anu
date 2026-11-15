@@ -1,0 +1,194 @@
+Q0
+| 0 - incorrect (expected: c ; found: cd)
+| 1 - incorrect (expected: ac ; found: a)
+| 10 - not answered (expected: c)
+| 2 - correct (e)
+| 3 - incorrect (expected: abdf ; found: abd)
+| 4 - incorrect (expected: a ; found: cd)
+| 5 - incorrect (expected: bc ; found: b)
+| 6 - incorrect (expected: ac ; found: a)
+| 7 - incorrect (expected: d ; found: st)
+| 8 - incorrect (expected: k ; found: ac)
+| 9 - not answered (expected: ac)
+
+Q1
+|   empty - FAILURE!
+|   |   Test Interface Failure: Could not compile FileSortTests.java
+|   oneLine1 - FAILURE!
+|   |   Test Interface Failure: Could not compile FileSortTests.java
+|   oneLine2 - FAILURE!
+|   |   Test Interface Failure: Could not compile FileSortTests.java
+|   twoLines1 - FAILURE!
+|   |   Test Interface Failure: Could not compile FileSortTests.java
+|   twoLines2 - FAILURE!
+|   |   Test Interface Failure: Could not compile FileSortTests.java
+|   twoLines3 - FAILURE!
+|   |   Test Interface Failure: Could not compile FileSortTests.java
+|   manyLines - FAILURE!
+|   |   Test Interface Failure: Could not compile FileSortTests.java
+
+Q2
+|   CORRECT - SUCCESS!
+|   ALWAYSDOUBLE - FAILURE!
+|   |   Incorrect instance passed by tests
+|   ALWAYSEVEN - FAILURE!
+|   |   Incorrect instance passed by tests
+|   FIRSTALWAYSAHEAD - FAILURE!
+|   |   Incorrect instance passed by tests
+|   SECONDALWAYSAHEAD - FAILURE!
+|   |   Incorrect instance passed by tests
+|   IGNORESCOLOUR - FAILURE!
+|   |   Incorrect instance passed by tests
+|   INCLUDESCURRENT - FAILURE!
+|   |   Incorrect instance passed by tests
+|   NODOUBLES - FAILURE!
+|   |   Incorrect instance passed by tests
+|   NOWINNERS - FAILURE!
+|   |   Incorrect instance passed by tests
+|   REQUIRESLAST - FAILURE!
+|   |   Incorrect instance passed by tests
+|   SKIPSCOLOUR - FAILURE!
+|   |   Incorrect instance passed by tests
+|   SKIPSOTHERPLAYER - FAILURE!
+|   |   Incorrect instance passed by tests
+|   WINNERCHANGES - FAILURE!
+|   |   Incorrect instance passed by tests
+
+Q3
+|   basicSingleStep - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   basicSingleStepWin - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   basicDoubleStepWin - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   backToEven - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   overtaking - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   secondPlayerWins - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   secondPlayerStillBehind - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   singleColourRed - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   singleColourGreen - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   singleColourBlue - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   singleColourDoubleRed - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   singleColourDoubleGreen - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   singleColourDoubleBlue - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   longerTrack - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   longerTrackBackForth - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   mixedCards - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   mixedCardsMixedTrack - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   winnerDoesNotChange - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   winnerDoesNotChange2 - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+
+Q4
+|   emptyTreeList - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   emptyTreeListToString - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   singletonTreeList - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   singletonTreeEquals - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   singletonHashCode - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   singletonTreeToString - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   simpleList - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   simpleListSort - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   simpleListTreeEquals - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   simpleListTreeEqualsStructuralIdentity - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   biggerHashCode - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   simpleTreeToStringList - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   simpleTreeToStringBalanced - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   simpleTreeToStringBalancedSwitched - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   biggerTreeList - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   biggerTreeEquality - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   biggerTreeHashCode - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   biggerToString - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+|   biggerToStringSwitched - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTreeTests.java
+
+Q4Fixed
+|   emptyTreeList - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   emptyTreeListToString - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   singletonTreeList - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   singletonTreeEquals - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   singletonHashCode - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   singletonTreeToString - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   simpleList - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   simpleListSort - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   simpleListTreeEquals - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   simpleListTreeEqualsStructuralIdentity - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   biggerHashCode - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   simpleTreeToStringList - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   simpleTreeToStringBalanced - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   simpleTreeToStringBalancedSwitched - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   biggerTreeList - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   biggerTreeEquality - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   biggerTreeHashCode - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   biggerToString - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+|   biggerToStringSwitched - FAILURE!
+|   |   Test Interface Failure: Could not compile BinarySearchTree.java
+
+Q5
+|   singleWordDone - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   singleWordNo - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   helloWorld - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   helloWorldStep1 - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   helloWorldTwoSteps - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   multiSteps - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   multiBigSteps - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+|   guessingSteps - FAILURE!
+|   |   Unexpected Result! Expected: [test success] | Actual: [test failure]
+

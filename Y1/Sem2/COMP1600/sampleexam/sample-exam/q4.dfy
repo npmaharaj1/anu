@@ -1,0 +1,109 @@
+/* 4A.
+   The method clampNeg replaces every negative element of the
+   array a with 0, leaving the other elements alone.  Its header
+   is missing a clause that Dafny needs before the method is even
+   allowed to change a.  Add it.
+
+   1 mark
+*/
+method clampNeg(a : array<int>)
+  modifies a
+  ensures forall i | 0 <= i < a.Length ::
+            a[i] == (if old(a[i]) < 0 then 0 else old(a[i]))
+{
+    var i := 0;
+    while i < a.Length
+/* 4B.
+   Add loop invariants to clampNeg's loop so that the method
+   verifies.
+
+   3 marks
+*/
+      invariant i <= a.Length
+      invariant forall n:nat | n < i :: a[n] == (if old(a[n]) < 0 then 0 else old(a[n]))
+      invariant forall n:nat | i <= n < a.Length :: a[n] == old(a[n])
+    {
+        if a[i] < 0 { a[i] := 0; }
+        i := i + 1;
+    }
+}
+
+/* 4C.
+   Define the predicate allNonNeg, which holds exactly when every
+   element of the array a is greater than or equal to zero.  If
+   your definition and your answers to 4A and 4B are correct, the
+   method clampTest (which you should not change) will verify.
+
+   1 mark
+*/
+predicate allNonNeg(a : array<int>)
+   reads a
+{
+   forall i : nat | i < a.Length :: a[i] >= 0
+}
+
+method clampTest(a : array<int>)
+  modifies a
+  ensures allNonNeg(a)
+{
+    clampNeg(a);
+}
+
+/* 4D.
+   Write the body of the method firstNeg, so that it returns the
+   index of the first negative element of a, or a.Length if there
+   is no negative element.  Your body must use a while loop (no
+   recursion, no calls to other methods).
+
+   3 marks
+*/
+method firstNeg(a : array<int>) returns (idx : nat)
+  ensures idx <= a.Length
+  ensures forall j | 0 <= j < idx :: a[j] >= 0
+  ensures idx < a.Length ==> a[idx] < 0
+{
+   var i:nat := 0;
+
+   while i < a.Length
+      invariant i <= a.Length
+      invariant forall j | 0 <= j < i :: a[j] >= 0
+   {
+      if a[i] < 0 {
+         idx := i;
+         return;
+      }
+      i := i + 1;
+   }
+
+   idx := a.Length;
+}
+
+/* 4E.
+   The method swap exchanges the elements at positions i and j of
+   the array a, but has an incomplete specification.  Strengthen
+   swap's specification (don't change its body) so that the
+   method sort2 below (which you should not change) verifies.
+
+   Note that sort2's postconditions say both that the first two
+   elements end up in order, and that the array still holds the
+   same elements as it did before (as a multiset).
+
+   2 marks
+*/
+method swap(a : array<int>, i : nat, j : nat)
+  requires i < a.Length && j < a.Length
+  ensures multiset(a[..]) == multiset(old(a[..]))
+  modifies a
+  ensures old(a[i]) == a[j]
+{
+    a[i], a[j] := a[j], a[i];
+}
+
+method sort2(a : array<int>)
+  requires a.Length >= 2
+  modifies a
+  ensures a[0] <= a[1]
+  ensures multiset(a[..]) == multiset(old(a[..]))
+{
+    if a[1] < a[0] { swap(a, 0, 1); }
+}
